@@ -113,7 +113,6 @@ function BuySellStokes(props) {
         } else if(totalAmt >= 10000) {
             return true
         }
-        debugger;
         buyOrSellStoke(orderObject);
         setdummyArray([...dummyArray, orderObject])
         console.log('clik' + JSON.stringify(dummyArray));
