@@ -53,7 +53,7 @@ function Header(props) {
     const openAnchorEl = Boolean(anchorEl);
     const { authService } = useOktaAuth();
 
-    const [selectedIndex, setSelectedIndex] = useState(0)
+    const [selectedIndex, setSelectedIndex] = useState(0);
 
     const handleMenu = (event) => {
         setAnchorEl(event.currentTarget)

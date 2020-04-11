@@ -85,7 +85,6 @@ function PopoverContent(props) {
     const [expanded, setExpanded] = useState(false);
 
     const onMouseOver = (e, result) => {
-        console.log(result);
         setbtnState(true)
     }
 
@@ -94,7 +93,6 @@ function PopoverContent(props) {
     }
 
     const iconsClicks = (data) => {
-        console.log(data);
         showWhichList(data);
     }
 

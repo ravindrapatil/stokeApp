@@ -59,7 +59,6 @@ function BuySellStokes(props) {
     const [switchChecked, setSwitchChecked] = useState(bsStatus);
     const [totalAmt, setTotalAmt] = useState(0)
     const [limitErrorMsg, setlimitErrorMsg] = useState(false);
-    const [dummyArray, setdummyArray] = useState([]);
 
     // const [orderObj, setorderObj] = useState({})
     const fixedPrice = 45.56;
@@ -67,8 +66,13 @@ function BuySellStokes(props) {
     const price = Number(num);
 
     useEffect(() => {
-        setTotalAmt(price * numberOfStokes);
-    }, [numberOfStokes])
+        if(radioGroupValue === 'market') {
+            setTotalAmt(price * numberOfStokes);
+        }
+        if(radioGroupValue === 'limit') {
+            setTotalAmt(numberOfStokes * limitPrice);
+        }
+    }, [numberOfStokes, limitPrice])
 
     const handleNoOfStokeChange = (e) => {
         let num = e.target.value
@@ -86,10 +90,10 @@ function BuySellStokes(props) {
         setRadioGroupValue(e.target.value)
         if (radioGroupValue === 'market') {
             setDisableEnableRadio(false);
-            setLimitPrice(0)
+            setLimitPrice(stokeSelected.dayEndClose ? stokeSelected.dayEndClose : fixedPrice);
         } else if (radioGroupValue === 'limit') {
             setDisableEnableRadio(true);
-            setLimitPrice(0)
+            setLimitPrice(0);
         }
         setlimitErrorMsg(false);
     }
@@ -104,6 +108,7 @@ function BuySellStokes(props) {
             limitPrice,
             radioGroupValue,
             totalAmt,
+            dayEndClose: stokeSelected.dayEndClose ? stokeSelected.dayEndClose : fixedPrice,
             switchChecked: switchChecked ? "Buy" : "Sell",
             symbol: stokeSelected.symbol ? stokeSelected.symbol : stokeSelected.Symbol
         }
@@ -114,8 +119,6 @@ function BuySellStokes(props) {
             return true
         }
         buyOrSellStoke(orderObject);
-        setdummyArray([...dummyArray, orderObject])
-        console.log('clik' + JSON.stringify(dummyArray));
     }
 
     return (
@@ -189,7 +192,7 @@ function BuySellStokes(props) {
                         />
                     </div>
                     <Typography variant="caption" style={{marginTop: '15px', display: 'flex', justifyContent: 'space-between'}} gutterBottom>
-                        <span style={{display: "block"}}>Total: {stokeSelected.dayEndClose ? stokeSelected.dayEndClose : fixedPrice} * {numberOfStokes} = {formatDecimals(totalAmt, 2)}</span>
+                        <span style={{display: "block"}}>Total: {radioGroupValue === 'limit' ? limitPrice : stokeSelected.dayEndClose ? stokeSelected.dayEndClose : fixedPrice } * {numberOfStokes} = {formatDecimals(totalAmt, 2)}</span>
                         <span style={{display: "block"}}>
                         {
                             totalAmt >= 10000 && <span style={{color: 'red'}}>Available cash / Margin available exceded 10K<br /></span> 

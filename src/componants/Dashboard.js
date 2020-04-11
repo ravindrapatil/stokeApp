@@ -9,6 +9,8 @@ import Header from './Header';
 import Sidebar from './Sidebar';
 import BuySellStokes from './BuySellStokes'
 
+export const AppDataContext = React.createContext();
+
 const drawerWidth = 350;
 
 const useStyles = makeStyles((theme) => ({
@@ -44,7 +46,6 @@ const useStyles = makeStyles((theme) => ({
 function Dashboard() {
     const classes = useStyles();
     const [open, SetOpen] = useState(true);
-
     const [buySellModel, setbuySellModel] = useState(false);
     const [selectedStoke, setSelectedStoke] = useState({});
     const [bsStatus, setbsStatus] = useState(true);
@@ -59,14 +60,11 @@ function Dashboard() {
     }
 
     const buySellStokes = (stoke, flag, buySellStatus) => {
-        console.log('Dashboard Ravindra - ' + JSON.stringify(stoke) + ' ' + flag);
         setbuySellModel(flag);
         setSelectedStoke({...selectedStoke, stoke});
         if(buySellStatus === 'buy') {
-            console.log('buy');
             setbsStatus(true);
         } else if(buySellStatus === 'sell') {
-            console.log('sell');
             setbsStatus(false);
         }
     }
@@ -78,7 +76,6 @@ function Dashboard() {
     const buyOrSellStoke = ((order) => {
         setorderList([...orderList, order]);
         setbuySellModel(false);
-        console.log("Ravindra " + JSON.stringify(orderList));
     })
 
     return (
@@ -92,11 +89,13 @@ function Dashboard() {
                 })}
             >
                 <div className={classes.drawerHeader} />
-
+                
                 <Switch>
                     {Routes.map((route) => (
                         <Route exact path={route.path} key={route.path}>
-                            <route.component />
+                            <AppDataContext.Provider value={{orderList}}>
+                                <route.component />
+                            </AppDataContext.Provider>
                         </Route>
                     ))}
                 </Switch>
