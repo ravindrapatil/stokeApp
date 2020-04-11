@@ -11,3 +11,17 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.stokeList div .MuiTypography-displayBlock {
+  display: flex !important;
+  justify-content: space-between !important;
+}
+
+.snackbar .MuiSnackbarContent-root {
+  background-color: #fb2323;
+}
+
+.custom-switch .MuiSwitch-track, .custom-switch .MuiSwitch-thumb, .custom-switch .MuiSwitch-colorSecondary.Mui-checked + .MuiSwitch-track {
+  background-color: #fff;
+}
+
