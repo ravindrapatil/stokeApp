@@ -59,6 +59,7 @@ function BuySellStokes(props) {
     const [switchChecked, setSwitchChecked] = useState(bsStatus);
     const [totalAmt, setTotalAmt] = useState(0)
     const [limitErrorMsg, setlimitErrorMsg] = useState(false);
+    const [qtyErrorMsg, setQtyErrorMsg] = useState(false)
 
     // const [orderObj, setorderObj] = useState({})
     const fixedPrice = 45.56;
@@ -78,12 +79,14 @@ function BuySellStokes(props) {
         let num = e.target.value
         SetNumberOfStokes(num);
         setlimitErrorMsg('');
+        setQtyErrorMsg(false);
     }
 
     const handleLimitPriceChange = (e) => {
         let limit = e.target.value
         setLimitPrice(limit);
         setlimitErrorMsg(false);
+        setQtyErrorMsg(false);
     }
 
     const handleRadioChange = (e) => {
@@ -96,6 +99,7 @@ function BuySellStokes(props) {
             setLimitPrice(0);
         }
         setlimitErrorMsg(false);
+        setQtyErrorMsg(false);
     }
 
     const toggleChecked = () => {
@@ -112,7 +116,10 @@ function BuySellStokes(props) {
             switchChecked: switchChecked ? "Buy" : "Sell",
             symbol: stokeSelected.symbol ? stokeSelected.symbol : stokeSelected.Symbol
         }
-        if(limitPrice === 0 && radioGroupValue === 'limit') {
+        if(Number(numberOfStokes) <= 0) {
+            setQtyErrorMsg(true);
+            return true;
+        } else if(Number(limitPrice) <= 0 && radioGroupValue === 'limit') {
             setlimitErrorMsg(true)
             return true
         } else if(totalAmt >= 10000) {
@@ -192,13 +199,18 @@ function BuySellStokes(props) {
                         />
                     </div>
                     <Typography variant="caption" style={{marginTop: '15px', display: 'flex', justifyContent: 'space-between'}} gutterBottom>
-                        <span style={{display: "block"}}>Total: {radioGroupValue === 'limit' ? limitPrice : stokeSelected.dayEndClose ? stokeSelected.dayEndClose : fixedPrice } * {numberOfStokes} = {formatDecimals(totalAmt, 2)}</span>
+                        {
+                            qtyErrorMsg && <span style={{display: "block", color: 'red'}}>Qty. must be greater then 0</span>
+                        }
+                        {
+                            (Number(numberOfStokes) > 0 || Number(limitPrice) > 0) && <span style={{display: "block"}}>Total: {radioGroupValue === 'limit' ? limitPrice : stokeSelected.dayEndClose ? stokeSelected.dayEndClose : fixedPrice } * {numberOfStokes} = {formatDecimals(totalAmt, 2)}</span>
+                        }
                         <span style={{display: "block"}}>
                         {
                             totalAmt >= 10000 && <span style={{color: 'red'}}>Available cash / Margin available exceded 10K<br /></span> 
                         }
                         {
-                            limitErrorMsg && <span style={{color: 'red'}}>Limit must be greater then 0</span>
+                            limitErrorMsg && <span style={{color: 'red'}}>Limit price must be greater then 0</span>
                         }
                         </span>
                     </Typography>

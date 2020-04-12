@@ -16,6 +16,21 @@ const useStyles = makeStyles({
     table: {
         minWidth: 650,
     },
+    orange: {
+        backgroundColor: '#ffe0d6'
+    },
+    blue: {
+        backgroundColor: '#d0d7fd'
+    },
+    tableHeadRow: {
+        backgroundColor: '#3f51b5'
+    },
+    headTextColor: {
+        color: '#fff'
+    },
+    td: {
+        borderBottom: '1px solid #9ca6e2'
+    }
 });
 
 function Orders() {
@@ -29,26 +44,26 @@ function Orders() {
             {
                 appMainData.orderList && appMainData.orderList.length ?
                     <TableContainer component={Paper}>
-                        <Table className={classes.table} size="small" aria-label="a dense table">
+                        <Table className={classes.table} aria-label="Order/s table">
                             <TableHead>
-                                <TableRow>
-                                    <TableCell>Instrument</TableCell>
-                                    <TableCell align="right">Buy/Sell</TableCell>
-                                    <TableCell align="right">Avg. Price</TableCell>
-                                    <TableCell align="right">Limit Price</TableCell>
-                                    <TableCell align="right">Qty.</TableCell>
-                                    <TableCell align="right">Profit/Loss</TableCell>
+                                <TableRow className={classes.tableHeadRow}>
+                                    <TableCell className={classes.headTextColor}>Instrument</TableCell>
+                                    <TableCell className={classes.headTextColor} align="right">Buy/Sell</TableCell>
+                                    <TableCell className={classes.headTextColor} align="right">Avg. Price</TableCell>
+                                    <TableCell className={classes.headTextColor} align="right">Limit Price</TableCell>
+                                    <TableCell className={classes.headTextColor} align="right">Qty.</TableCell>
+                                    <TableCell className={classes.headTextColor} align="right">Profit/Loss</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {appMainData.orderList.map((row) => (
-                                    <TableRow key={row.symbol}>
-                                        <TableCell component="th" scope="row">{row.symbol}</TableCell>
-                                        <TableCell align="right">{row.switchChecked}</TableCell>
-                                        <TableCell align="right">{row.limitPrice === 0 ? <span>{row.dayEndClose}</span> : <span style={{ textDecorationLine: 'line-through' }}>{row.dayEndClose}</span>}</TableCell>
-                                        <TableCell align="right">{row.limitPrice}</TableCell>
-                                        <TableCell align="right">{row.numberOfStokes}</TableCell>
-                                        <TableCell align="right">{formatDecimals(row.totalAmt, 2)}</TableCell>
+                                {appMainData.orderList.map((row, index) => (
+                                    <TableRow key={index} className={`${row.switchChecked === 'Buy' ? [classes.blue] : [classes.orange]} ${classes.red}`} >
+                                        <TableCell className={classes.td} component="th" scope="row">{row.symbol}</TableCell>
+                                        <TableCell className={classes.td} align="right">{row.switchChecked}</TableCell>
+                                        <TableCell className={classes.td} align="right">{row.limitPrice === 0 ? <span>{row.dayEndClose}</span> : <span style={{ textDecorationLine: 'line-through' }}>{row.dayEndClose}</span>}</TableCell>
+                                        <TableCell className={classes.td} align="right">{row.limitPrice}</TableCell>
+                                        <TableCell className={classes.td} align="right">{row.numberOfStokes}</TableCell>
+                                        <TableCell className={classes.td} align="right">{formatDecimals(row.totalAmt, 2)}</TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>
