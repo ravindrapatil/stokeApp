@@ -66,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Sidebar(props) {
-    const { open, handleDrawerClose, buySellStokes } = props;
+    const { open, handleDrawerClose, buySellStokes, goToChart } = props;
     const classes = useStyles()
     const theme = useTheme();
 
@@ -90,8 +90,8 @@ function Sidebar(props) {
                 </IconButton>
             </div>
             <Divider />
-            <Searchstokes buySellStokes = {buySellStokes} />
-            <NiftyStockWatch buySellStokes = {buySellStokes} />
+            <Searchstokes buySellStokes = {buySellStokes} goToChart = {goToChart} />
+            <NiftyStockWatch buySellStokes = {buySellStokes} goToChart = {goToChart} />
         </Drawer>
     )
 }

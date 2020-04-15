@@ -1,4 +1,5 @@
 import React from 'react'
+import { withRouter } from 'react-router-dom';
 
 function Holdings() {
     return (
@@ -9,4 +10,4 @@ function Holdings() {
     )
 }
 
-export default Holdings
+export default withRouter(Holdings)

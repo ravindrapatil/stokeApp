@@ -3,6 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import { withRouter } from 'react-router-dom';
 
 import Routes from '../routes/Routes'
 import Header from './Header';
@@ -43,13 +44,14 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function Dashboard() {
+function Dashboard(props) {
     const classes = useStyles();
     const [open, SetOpen] = useState(true);
     const [buySellModel, setbuySellModel] = useState(false);
     const [selectedStoke, setSelectedStoke] = useState({});
     const [bsStatus, setbsStatus] = useState(true);
     const [orderList, setorderList] = useState([]);
+    const [chartData, setChartData] = useState({})
 
     const handleDrawerOpen = () => {
         SetOpen(true)
@@ -61,10 +63,10 @@ function Dashboard() {
 
     const buySellStokes = (stoke, flag, buySellStatus) => {
         setbuySellModel(flag);
-        setSelectedStoke({...selectedStoke, stoke});
-        if(buySellStatus === 'buy') {
+        setSelectedStoke({ ...selectedStoke, stoke });
+        if (buySellStatus === 'buy') {
             setbsStatus(true);
-        } else if(buySellStatus === 'sell') {
+        } else if (buySellStatus === 'sell') {
             setbsStatus(false);
         }
     }
@@ -76,24 +78,37 @@ function Dashboard() {
     const buyOrSellStoke = ((order) => {
         setorderList([...orderList, order]);
         setbuySellModel(false);
+        props.history.push('/orders');
     })
+
+    const goToChart = (data) => {
+        console.log('clicked.....');
+        setChartData(data);
+        props.history.push('/chart');
+    }
 
     return (
         <div className={classes.root}>
             <CssBaseline />
             <Header open={open} handleDrawerOpen={handleDrawerOpen} />
-            <Sidebar open={open} handleDrawerClose={handleDrawerClose} buySellStokes={buySellStokes} />
+            <Sidebar open={open} handleDrawerClose={handleDrawerClose} buySellStokes={buySellStokes} goToChart={goToChart} />
             <main
                 className={clsx(classes.content, {
                     [classes.contentShift]: open,
                 })}
             >
                 <div className={classes.drawerHeader} />
-                
+
                 <Switch>
                     {Routes.map((route) => (
+                        // <Route exact path={route.path} key={route.path} render={() => (
+                        //     <AppDataContext.Provider value={{ orderList }}>
+                        //         <route.component project = {{name: 'Stoke App', chartData: chartData}} />
+                        //     </AppDataContext.Provider>
+                        // )}>
+                        // </Route>
                         <Route exact path={route.path} key={route.path}>
-                            <AppDataContext.Provider value={{orderList}}>
+                            <AppDataContext.Provider value={{ orderList }}>
                                 <route.component />
                             </AppDataContext.Provider>
                         </Route>
@@ -101,15 +116,16 @@ function Dashboard() {
                 </Switch>
             </main>
             {
-                buySellModel && <BuySellStokes 
-                    buySellModel={buySellModel} 
-                    selectedStoke={selectedStoke} 
+                buySellModel && <BuySellStokes
+                    buySellModel={buySellModel}
+                    selectedStoke={selectedStoke}
                     handleCloseBuySellModel={handleCloseBuySellModel}
-                    buyOrSellStoke = {buyOrSellStoke} 
-                    bsStatus={bsStatus} />
+                    buyOrSellStoke={buyOrSellStoke}
+                    bsStatus={bsStatus}
+                    goToChart={goToChart} />
             }
         </div>
     )
 }
 
-export default Dashboard
+export default withRouter(Dashboard)

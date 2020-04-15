@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
+import { BrowserRouter } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -8,10 +9,8 @@ import TrendingUpRoundedIcon from '@material-ui/icons/TrendingUpRounded';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import MoreHorizOutlinedIcon from '@material-ui/icons/MoreHorizOutlined';
 import Tooltip from '@material-ui/core/Tooltip';
-// import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-// import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-// import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import StokesMiniInfo from './StokesMiniInfo'
+import { withRouter } from 'react-router-dom';
+import StokesMiniInfo from './StokesMiniInfo';
 
 const useStyles = makeStyles((theme) => ({
     smallBtn: {
@@ -80,8 +79,8 @@ const useStyles = makeStyles((theme) => ({
 
 function PopoverContent(props) {
     const classes = useStyles();
-    const { index, result, stokeResult, showWhichList, removeStoke, buySellStokes } = props
-    const [btnState, setbtnState] = useState(false)
+    const { index, result, stokeResult, removeStoke, buySellStokes, goToChart } = props;
+    const [btnState, setbtnState] = useState(false);
     const [expanded, setExpanded] = useState(false);
 
     const onMouseOver = (e, result) => {
@@ -90,10 +89,6 @@ function PopoverContent(props) {
 
     const onMouseOut = (e, result) => {
         setbtnState(false)
-    }
-
-    const iconsClicks = (data) => {
-        showWhichList(data);
     }
 
     const TF = btnState ? '#f2f2f2' : '#fff'
@@ -109,6 +104,11 @@ function PopoverContent(props) {
     const removeStokes = ((data, index, flag) => {
         removeStoke(data, index);
         setExpanded(flag);
+    })
+
+    const goToChart2 = ((data) => {
+        let code = data.symbol ? data.symbol : data.Symbol;
+        props.history.push('/chart/' + code);
     })
 
     return (
@@ -152,7 +152,7 @@ function PopoverContent(props) {
                                 </Button>
                             </Tooltip>
                             <Tooltip title="Chart">
-                                <Button size="small" className={`${classes.smallBtnWithIcons}`} onClick={() => iconsClicks(result ? result : stokeResult)} variant="contained">
+                                <Button size="small" className={`${classes.smallBtnWithIcons}`} onClick={() => goToChart2(result ? result : stokeResult)} variant="contained">
                                     <TrendingUpRoundedIcon />
                                 </Button>
                             </Tooltip>
@@ -188,4 +188,4 @@ function PopoverContent(props) {
     )
 }
 
-export default PopoverContent
+export default withRouter(PopoverContent)

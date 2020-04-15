@@ -1,4 +1,4 @@
-import React, { useState } from 'react' // , { useState }
+import React, { useState, useEffect, useRef } from 'react' // , { useState }
 import { makeStyles, fade } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
 import InputBase from '@material-ui/core/InputBase';
@@ -65,7 +65,9 @@ function TransitionLeft(props) {
 
 function Searchstokes(props) {
     const classes = useStyles();
-    const { buySellStokes } = props;
+    const { buySellStokes, goToChart } = props;
+    const wrapperRef = useRef(null)
+    const [display, setdisplay] = useState(false)
 
     const initialState = {
         query: '',
@@ -79,13 +81,55 @@ function Searchstokes(props) {
     const [transition, setTransition] = useState(undefined);
     const [open, setOpen] = useState(false);
 
+    // useEffect(() => {
+    //     document.addEventListener("mousedown", handleClickOutside);
+
+    //     return () => {
+    //         document.removeEventListener("mousedown", handleClickOutside);
+    //     }
+    // }, [])
+
+    // const handleClickOutside = (event) => {
+    //     setSearchState({ ...searchState, query: '' });
+    //     const { current: wrap } = wrapperRef;
+    //     if (wrap && !wrap.contains(event.target)) {
+    //         setdisplay(false);
+    //     }
+    // }
+
     const handleOnInputChange = (e) => {
+        if(e === undefined) {
+            setdisplay(false);
+            setSearchState({...searchState, query: ''});
+            return true;
+        }
         const searchQuery = e.target.value;
         if (!searchQuery) {
             setSearchState({ query: searchQuery, results: [], loading: false, message: '' });
         } else {
             setSearchState({ query: searchQuery, loading: true, message: '' });
         }
+
+        if (!display) {
+            document.addEventListener('click', handleOutsideClick, false);
+        } else {
+            document.removeEventListener('click', handleOutsideClick, false);
+        }
+        setdisplay(prevState => ({
+            display: !prevState.display
+        }))
+    }
+
+    const handleOutsideClick = (e) => {
+        if(wrapperRef.current === null) {
+            return true
+        }
+        // ignore clicks on the component itself
+        if (wrapperRef.current.contains(e.target)) {
+            return;
+        }
+        // setdisplay(false);
+        handleOnInputChange()
     }
 
     const addToStockList = (data) => {
@@ -110,11 +154,7 @@ function Searchstokes(props) {
 
     const handleClose = () => {
         setOpen(false);
-      };
-
-    const showWhichList = (data) => {
-        console.log(data);
-    }
+    };
 
     const removeStoke = (data) => {
         console.log(data);
@@ -130,9 +170,9 @@ function Searchstokes(props) {
                             return <PopoverContent key={index}
                                 result={result}
                                 addToStockList={addToStockList}
-                                showWhichList={showWhichList}
                                 removeStoke={removeStoke}
-                                buySellStokes = {buySellStokes}
+                                buySellStokes={buySellStokes}
+                                goToChart={goToChart}
                             />
                         })
                     }
@@ -143,7 +183,8 @@ function Searchstokes(props) {
 
     return (
         <>
-            <div>
+            {/* ref={wrapperRef} */}
+            <div ref={wrapperRef}>
                 <div className={classes.search}>
                     <div className={classes.searchIcon}>
                         <SearchIcon />
@@ -161,16 +202,20 @@ function Searchstokes(props) {
                         onChange={handleOnInputChange}
                     />
                 </div>
-                <div style={{ position: 'absolute', top: '87px', width: '100%', zIndex: '100', background: '#fff' }}>
+                <div>
                     {
-                        message && <p>{message}</p>
-                    }
-                    {
-                        <p className={`${loading ? [classes.show] : [classes.hide]}`}>loading ...</p>
-                    }
-                    {
-                        // opens ? renderSearchResulr() : null
-                        renderSearchResulr()
+                        display && <div style={{ position: 'absolute', top: '87px', width: '100%', zIndex: '100', background: '#fff' }}>
+                            {
+                                message && <p style={{ color: '#3f51b5', textAlign: 'center' }}>{message}</p>
+                            }
+                            {
+                                <p className={`${loading ? [classes.show] : [classes.hide]}`}>loading ...</p>
+                            }
+                            {
+                                // opens ? renderSearchResulr() : null
+                                renderSearchResulr()
+                            }
+                        </div>
                     }
                 </div>
             </div>

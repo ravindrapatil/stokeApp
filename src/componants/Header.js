@@ -53,7 +53,7 @@ function Header(props) {
     const openAnchorEl = Boolean(anchorEl);
     const { authService } = useOktaAuth();
 
-    const [selectedIndex, setSelectedIndex] = useState(0);
+    // const [selectedIndex, setSelectedIndex] = useState(0);
 
     const handleMenu = (event) => {
         setAnchorEl(event.currentTarget)
@@ -67,9 +67,9 @@ function Header(props) {
         handleDrawerOpen()
     }
 
-    const handleMenuItemClick = (event, index) => {
-        setSelectedIndex(index)
-    }
+    // const handleMenuItemClick = (event, index) => {
+    //     setSelectedIndex(index)
+    // }
 
     const logout =  async () => {
         authService.logout('/');
@@ -110,9 +110,9 @@ function Header(props) {
                                         component={Link} 
                                         to={prop.path} 
                                         key={index} 
-                                        selected={index === selectedIndex} 
+                                        // selected={index === selectedIndex} 
                                         className={classes.menuDisplay}
-                                        onClick={(event) => handleMenuItemClick(event, index)}
+                                        // onClick={(event) => handleMenuItemClick(event, index)}
                                     >
                                         <ListItemText primary={prop.name} />
                                     </MenuItem>

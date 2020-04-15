@@ -2,7 +2,6 @@ import React from 'react'
 // import { useOktaAuth } from '@okta/okta-react';
 
 function Test() {
-    debugger;
     // const { authState, authService } = useOktaAuth();
 
     // const logout2 = async () => {

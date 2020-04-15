@@ -3,7 +3,7 @@ import axios from 'axios';
 import PopoverContent from './PopoverContent';
 
 function NiftyStockWatch(props) {
-    const { buySellStokes } = props
+    const { buySellStokes, goToChart } = props
     const [stokes, setStokes] = useState({})
 
     const fetchData = async (source) => {
@@ -30,10 +30,6 @@ function NiftyStockWatch(props) {
         console.log('Clicked --- ' + data)
     }
 
-    const showWhichList = (data) => {
-        console.log(data);
-    }
-
     const removeStoke = ((data, index) => {
         stokes.splice(index, 1);
         setStokes([...stokes]);
@@ -50,9 +46,9 @@ function NiftyStockWatch(props) {
                                 stokeResult = {data} 
                                 index = {index}
                                 removeStoke = {removeStoke} 
-                                showWhichList = {showWhichList} 
                                 addToStockList={addToStockList} 
                                 buySellStokes = {buySellStokes}
+                                goToChart = {goToChart}
                             />
                         })
                     }

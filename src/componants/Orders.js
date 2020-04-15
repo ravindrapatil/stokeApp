@@ -33,9 +33,10 @@ const useStyles = makeStyles({
     }
 });
 
-function Orders() {
+function Orders(props) {
     const classes = useStyles();
-    const appMainData = useContext(AppDataContext)
+    const appMainData = useContext(AppDataContext);
+
     return (
         <div>
             <Typography variant="h4" align="left" style={{paddingBottom: '25px'}}>
@@ -70,7 +71,7 @@ function Orders() {
                         </Table>
                     </TableContainer>
                     :
-                    <p>No data found</p> 
+                    <p style={{textAlign: 'center'}}>No data found</p> 
             }
 
         </div>
