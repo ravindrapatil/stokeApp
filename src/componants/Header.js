@@ -11,6 +11,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import { Link } from "react-router-dom";
 import { MenuList, ListItemText } from '@material-ui/core';
+import { withRouter } from 'react-router-dom';
 import { useOktaAuth } from '@okta/okta-react';
 
 import Routes from '../routes/Routes'
@@ -73,6 +74,10 @@ function Header(props) {
 
     const logout =  async () => {
         authService.logout('/');
+    }
+
+    const handleProfile = () => {
+        props.history.push('/profile');
     }
 
     return (
@@ -143,7 +148,7 @@ function Header(props) {
                             open={openAnchorEl}
                             onClose={handleClose}
                         >
-                            <MenuItem onClick={handleClose}>Profile</MenuItem>
+                            <MenuItem onClick={handleProfile}>Profile</MenuItem>
                             <MenuItem onClick={handleClose}>My account</MenuItem>
                             <MenuItem onClick={logout}>Logout</MenuItem>
                         </Menu>
@@ -155,4 +160,4 @@ function Header(props) {
     )
 }
 
-export default Header
+export default withRouter(Header)

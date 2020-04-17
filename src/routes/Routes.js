@@ -1,7 +1,8 @@
-import Mainpage from '../componants/Mainpage'
-import Orders from '../componants/Orders'
-// import Holdings from '../componants/Holdings'
-import ChartStokes from '../componants/ChartStokes'
+import Mainpage from '../componants/Mainpage';
+import Orders from '../componants/Orders';
+// import Holdings from '../componants/Holdings';
+import ChartStokes from '../componants/ChartStokes';
+import Profile from '../componants/Profile';
 
 const Routes = [
     {
@@ -27,6 +28,12 @@ const Routes = [
         name: 'Chart',
         title: "Chart",
         component: ChartStokes
+    },
+    {
+        path: '/profile',
+        name: 'Profile',
+        title: "Profile",
+        component: Profile
     }
 ];
 
